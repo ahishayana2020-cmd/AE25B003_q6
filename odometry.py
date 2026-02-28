@@ -8,20 +8,16 @@ class Odometry:
         self.gt_x = 5.0
         self.gt_y = 2.5
         self.gt_theta = 0.0
-        self.conversion_factor = 1.3
+        self.conversion_factor = 1
 
         # Estimated pose (odometry)
         self.x = 5.0
         self.y = 2.5
-        self.theta = 0.523 #(pi/6)
+        self.theta = 0.0 
 
     def update(self, v, omega, dt):
-        """
-        Update ground truth and odometry states
-        using commanded linear and angular velocity.
-        """
-
-        # --------------------------------
+        
+                # --------------------------------
         # Ground truth motion integration
         # --------------------------------
         self.gt_x += v * math.cos(self.gt_theta) * dt
@@ -32,6 +28,7 @@ class Odometry:
         # --------------------------------
         # Odometry motion integration
         # --------------------------------
-        self.x += v * math.sin(self.theta + 0.1) * dt
-        self.y += v * math.cos(self.theta) * dt
+        self.x += v * math.cos(self.theta) * dt
+        self.y += v * math.sin(self.theta) * dt
         self.theta += omega * dt *self.conversion_factor
+        self.theta = normalize_angle(self.theta)  
